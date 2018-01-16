@@ -1,0 +1,10 @@
+/Users/danielswantek/source/codeworks/keepr_c/obj/Debug/netcoreapp2.0/keepr_c.csproj.CoreCompileInputs.cache
+/Users/danielswantek/source/codeworks/keepr_c/obj/Debug/netcoreapp2.0/keepr_c.AssemblyInfoInputs.cache
+/Users/danielswantek/source/codeworks/keepr_c/obj/Debug/netcoreapp2.0/keepr_c.AssemblyInfo.cs
+/Users/danielswantek/source/codeworks/keepr_c/bin/Debug/netcoreapp2.0/keepr_c.deps.json
+/Users/danielswantek/source/codeworks/keepr_c/bin/Debug/netcoreapp2.0/keepr_c.runtimeconfig.json
+/Users/danielswantek/source/codeworks/keepr_c/bin/Debug/netcoreapp2.0/keepr_c.runtimeconfig.dev.json
+/Users/danielswantek/source/codeworks/keepr_c/bin/Debug/netcoreapp2.0/keepr_c.dll
+/Users/danielswantek/source/codeworks/keepr_c/bin/Debug/netcoreapp2.0/keepr_c.pdb
+/Users/danielswantek/source/codeworks/keepr_c/obj/Debug/netcoreapp2.0/keepr_c.dll
+/Users/danielswantek/source/codeworks/keepr_c/obj/Debug/netcoreapp2.0/keepr_c.pdb
