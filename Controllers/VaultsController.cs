@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using keepr_c.Models;
 using keepr_c.Repositories;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace keepr_c.Controllers
@@ -18,23 +20,29 @@ namespace keepr_c.Controllers
         }
 
         // GET api/vaults
-        [HttpGet]
-        public IEnumerable<Vault> Get()
+        [Authorize]
+        [HttpGet("{userId}")]
+        public IEnumerable<Vault> GetByUser(int userId)
         {
-            return db.GetAll();
+            return db.GetAllByUser(userId);
         }
 
         // GET api/vaults/5
-        [HttpGet("{id}")]
-        public Vault Get(int id)
-        {
-            return db.GetById(id);
-        }
+        // [HttpGet("{id}")]
+        // public Vault Get(int id)
+        // {
+        //     return db.GetById(id);
+        // }
 
         // POST api/vaults
+        [Authorize]
         [HttpPost]
         public Vault Post([FromBody]Vault vault)
         {
+            var user = HttpContext.User.Identity.Name;
+            int Id;
+            int.TryParse( user, out Id);
+            vault.UserId = Id;
             return db.Add(vault);
         }
 
@@ -50,6 +58,7 @@ namespace keepr_c.Controllers
         }
 
         // DELETE api/vaults/5
+        [Authorize]
         [HttpDelete("{id}")]
         public string Delete(int id)
         {

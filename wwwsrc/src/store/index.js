@@ -25,7 +25,10 @@ var store = new vuex.Store({
         oauth: {},
         user: {},
         keeps: [],
-        vaults: []
+        vaults: [],
+        userKeeps: [],
+        activeKeep: {},
+        activeVault: {},
     },
     mutations: {
         handleError(state, err) {
@@ -35,9 +38,20 @@ var store = new vuex.Store({
             state.user = data
             // state.oauth = data
         },
-        setKeeps(state, data){
-            debugger
+        setKeeps(state, data) {
             state.keeps = data
+        },
+        setVaults(state, data) {
+            state.vaults = data
+        },
+        setUserKeeps(state, data) {
+            state.userKeeps = data
+        },
+        setActiveKeep(state, data) {
+            state.activeKeep = data
+        },
+        setActiveVault(state, data) {
+            state.activeVault = data
         }
     },
     actions: {
@@ -69,6 +83,7 @@ var store = new vuex.Store({
                 .then(res => {
                     // dispatch('getAll')
                     commit('setUser', res.data)
+                    dispatch('getVaultsByUser')
                     router.push({ name: 'Home' })
                 })
                 .catch(err => {
@@ -90,8 +105,10 @@ var store = new vuex.Store({
             // }
             auth.put('accounts/update-account', payload)
                 .then(res => {
-                    debugger
                     dispatch('authenticate')
+                })
+                .catch(err => {
+                    commit('handleError', err)
                 })
         },
         googleAuthenticate({ commit, dispatch }, newData) {
@@ -114,13 +131,9 @@ var store = new vuex.Store({
                     router.push({ name: 'Login' })
                 })
         },
-        getAll({ commit, dispatch }) {
-            // dispatch('getWeather')
-            // dispatch('getTodos')
-            // dispatch('getEvents')
-            // dispatch('getQuote')
-            // dispatch('getBoards')
-        },
+        // getAll({ commit, dispatch }) {
+
+        // },
         authenticateProfile({ commit, dispatch }) {
             auth('authenticate')
                 .then(res => {
@@ -134,24 +147,120 @@ var store = new vuex.Store({
             auth.delete('accounts/logout')
                 .then(res => {
                     commit('setUser', {})
-                    // commit('setBoards', [])
-                    // router.push({ name: 'Login' })
+                })
+                .catch(err => {
+                    commit('handleError', err)
                 })
         },
         createKeep({ commit, dispatch }, payload) {
-            debugger
             api.post('keeps', payload)
                 .then(res => {
                     dispatch('getKeeps')
                 })
+                .catch(err => {
+                    commit('handleError', err)
+                })
         },
-        getKeeps({ commit, dispatch }){
+        getKeeps({ commit, dispatch }) {
             api('keeps')
                 .then(res => {
-                    debugger
                     commit('setKeeps', res.data)
                 })
-        }
+                .catch(err => {
+                    commit('handleError', err)
+                })
+        },
+        getKeepsByUser({ commit, dispatch }) {
+            var userId = this.state.user.id
+            api('keeps/' + userId, userId)
+                .then(res => {
+                    commit('setUserKeeps', res.data)
+                })
+                .catch(err => {
+                    commit('handleError', err)
+                })
+        },
+        deleteKeep({ commit, dispatch }, payload) {
+            api.delete('keeps/' + payload)
+                .then(res => {
+                    dispatch('getKeepsByUser')
+                    dispatch('getKeeps')
+                })
+                .catch(err => {
+                    commit('handleError', err)
+                })
+        },
+        setActiveKeep({ commit }, payload) {
+            commit('setActiveKeep', payload)
+        },
+        updateKeep({ commit, dispatch }, payload) {
+            debugger
+            api.put('keeps/' + payload.id, payload)
+                .then(res => {
+                    dispatch('getKeeps')
+                })
+                .catch(err => {
+                    commit('handleError', err)
+                })
+        },
+        createVault({ commit, dispatch }, payload) {
+            api.post('vaults/', payload)
+                .then(res => {
+                    dispatch('getVaultsByUser')
+                })
+                .catch(err => {
+                    commit('handleError', err)
+                })
+        },
+        setActiveVault({ commit }, payload) {
+            commit('setActiveVault', payload)
+        },
+        getVaultsByUser({ commit, dispatch }) {
+            var userId = this.state.user.id
+            api('vaults/' + userId, userId)
+                .then(res => {
+                    commit('setVaults', res.data)
+                })
+                .catch(err => {
+                    commit('handleError', err)
+                })
+        },
+        deleteVault({ commit, dispatch }, payload) {
+            api.delete('vaults/' + payload)
+                .then(res => {
+                    dispatch('getVaultsByUser')
+                })
+                .catch(err => {
+                    commit('handleError', err)
+                })
+        },
+        addKeepToVault({ commit, dispatch }, payload) {
+            api.post('vaultkeeps/', payload)
+                .then(res => {
+                    dispatch('getKeeps')
+                })
+                .catch(err => {
+                    commit('handleError', err)
+                })
+        },
+        getKeepsByVault({ commit, dispatch }, payload) {
+            api('vaultkeeps/' + payload)
+                .then(res => {
+                    commit('setUserKeeps', res.data)
+                })
+                .catch(err => {
+                    commit('handleError', err)
+                })
+        },
+        removeKeepFromVault({ commit, dispatch }, payload) {
+            api.delete('vaultkeeps/' + payload.keepId)
+                .then(res => {
+                    dispatch('getKeepsByVault')
+                })
+                .catch(err => {
+                    commit('handleError', err)
+                })
+        },
     }
 })
 

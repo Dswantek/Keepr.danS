@@ -54,6 +54,7 @@
 <script>
     export default {
         data() {
+            name: 'Signup'
             return {
                 register: {
                     name: '',

@@ -26,19 +26,25 @@ namespace keepr_c.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public Keep Get(int id)
-        {
-            return db.GetById(id);
-        }
+        // [HttpGet("{id}")]
+        // public Keep Get(int id)
+        // {
+        //     return db.GetById(id);
+        // }
 
+        [Authorize]
         [HttpPost]
         public Keep Post([FromBody]Keep keep)
         {
-            return db.Post(keep);
+            var user = HttpContext.User.Identity.Name;
+            int Id;
+            int.TryParse( user, out Id);
+            keep.UserId = Id;
+            return db.Add(keep);
         }
 
           // PUT api/values/5
+        [Authorize]
         [HttpPut("{id}")]
         public Keep Put(int id, [FromBody]Keep keep)
         {
@@ -50,10 +56,18 @@ namespace keepr_c.Controllers
         }
 
         // DELETE api/values/5
+        [Authorize]
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
             return db.FindByIdAndRemove(id);
+        }
+
+        [Authorize]
+        [HttpGet("{userId}")]
+        public IEnumerable<Keep> GetByUser(int userId)
+        {
+            return db.GetByUserId(userId);
         }
     }
 }
