@@ -1,5 +1,10 @@
 <template>
   <div class="home-content">
+    <div class="row title-content">
+      <div class="col-xs-12">
+        <h1>Keepr</h1>
+      </div>
+    </div>
     <div class="row home-top">
       <div class="newKeep col-xs-4 col-md-1 pull-left">
         <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#keepModal">
@@ -129,6 +134,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+  .title-content{
+    padding-bottom: 8vh;
+  }
+
   .keepImage {
     max-width: 20vw;
     max-height: 50vh;
