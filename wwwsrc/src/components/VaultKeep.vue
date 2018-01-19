@@ -96,7 +96,6 @@
                 this.updateKeep(this.activeKeep)
             },
             updateKeep(activeKeep){
-                debugger
                 activeKeep.saves++
                 this.$store.dispatch('updateKeep', activeKeep)
             }

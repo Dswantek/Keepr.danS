@@ -16,7 +16,9 @@
                     <h3>
                         <span class="fa fa-archive"></span>
                     </h3>
-                    <h2>Your Vaults</h2>
+                    <router-link to="/vaults">
+                        <h2>Your Vaults</h2>
+                    </router-link>
                 </div>
                 <div class="posts">
                     <!-- all of the posts in order from most viewed -->
@@ -55,7 +57,7 @@
                     <!-- <div class="col-xs-12"> -->
                     <div v-for="keep in userKeeps">
                         <div class="col-xs-12 col-md-4 text-center">
-                            <div class="panel panel-info">
+                            <div class="keep-content panel panel-info">
                                 <div class="row">
                                     <div class="col-xs-offset-10">
                                         <span class="delete-button fa fa-trash" @click="deleteKeep(keep.id)"></span>
@@ -88,6 +90,17 @@
                                         <p>{{keep.likes}} </p>
                                     </div>
                                 </div>
+                                <div class="overlay hover-buttons">
+                                    <div class="hoverButton col-xs-4">
+                                        <button class="fa fa-lg fa-heart" @click="addLike(keep)"></button>
+                                    </div>
+                                    <div class="hoverButton col-xs-4">
+                                        <button class="fa fa-lg fa-plus" data-toggle="modal" data-target="#vaultKeepModal" @click="setActiveKeep(keep)"></button>
+                                    </div>
+                                    <div class="hoverButton col-xs-4">
+                                        <button class="fa fa-lg fa-share-alt" @click="shareKeep(keep)"></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -96,11 +109,13 @@
             </div>
         </div>
         <create></create>
+        <vaultKeep></vaultKeep>
     </div>
 </template>
 
 <script>
     import Create from './Create'
+    import VaultKeep from './VaultKeep'
     export default {
         name: 'Home',
         data() {
@@ -125,10 +140,10 @@
         },
         components: {
             Create,
+            VaultKeep
         },
         methods: {
             setActiveVault(vault) {
-                debugger
                 this.$store.dispatch('setActiveVault', vault)
             },
             deleteKeep(keepId) {
@@ -136,6 +151,15 @@
             },
             deleteVault(vaultId) {
                 this.$store.dispatch('deleteVault', vaultId)
+            },
+            addLike(keep) {
+                keep.views++
+                this.$store.dispatch('updateKeep', keep)
+            },
+            setActiveKeep(keep) {
+                keep.views++
+                this.$store.dispatch('setActiveKeep', keep)
+                this.$store.dispatch('updateKeep', keep)
             }
         },
         mounted() {
@@ -148,6 +172,12 @@
             },
             vaults() {
                 return this.$store.state.vaults
+            },
+            activeKeep() {
+                return this.$store.state.activeKeep
+            },
+            activeVault() {
+                return this.$store.state.activeVault
             },
             user() {
                 return this.$store.state.user
@@ -198,6 +228,32 @@
 
     .vaultDeleteButton {
         padding-top: 6vh;
+    }
+
+    .keep-content:hover .overlay {
+        opacity: .5;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+        transition: .5s ease;
+        background-color: #40cc4c;
+    }
+
+    .hover-buttons {
+        top: 50%;
+        left: 50%;
+        position: absolute;
+        font-size: 30px;
+        transform: translate(-50%, -50%);
+        text-align: center;
     }
 
     /* .home-content{

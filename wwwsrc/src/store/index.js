@@ -29,6 +29,7 @@ var store = new vuex.Store({
         userKeeps: [],
         activeKeep: {},
         activeVault: {},
+        vaultKeeps: {}
     },
     mutations: {
         handleError(state, err) {
@@ -47,10 +48,14 @@ var store = new vuex.Store({
         setUserKeeps(state, data) {
             state.userKeeps = data
         },
+        setVaultKeeps(state, data){
+            state.vaultKeeps = data
+        },
         setActiveKeep(state, data) {
             state.activeKeep = data
         },
         setActiveVault(state, data) {
+            console.log("active vault:", data)
             state.activeVault = data
         }
     },
@@ -194,7 +199,6 @@ var store = new vuex.Store({
             commit('setActiveKeep', payload)
         },
         updateKeep({ commit, dispatch }, payload) {
-            debugger
             api.put('keeps/' + payload.id, payload)
                 .then(res => {
                     dispatch('getKeeps')
@@ -246,7 +250,7 @@ var store = new vuex.Store({
         getKeepsByVault({ commit, dispatch }, payload) {
             api('vaultkeeps/' + payload)
                 .then(res => {
-                    commit('setUserKeeps', res.data)
+                    commit('setVaultKeeps', res.data)
                 })
                 .catch(err => {
                     commit('handleError', err)

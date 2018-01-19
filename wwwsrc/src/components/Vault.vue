@@ -107,6 +107,7 @@
             </div>
         </div>
         <create></create>
+        <vaultKeep></vaultKeep>
     </div>
 </template>
 
@@ -133,13 +134,13 @@
                     userId: '',
                     id: ''
                 },
-                activeVault: {
-                    name: '',
-                    description: '',
-                    image: '',
-                    userId: '',
-                    id: ''
-                }
+                // activeVault: {
+                //     name: '',
+                //     description: '',
+                //     image: '',
+                //     userId: '',
+                //     id: ''
+                // }
             }
         },
         components: {
@@ -148,6 +149,7 @@
         },
         methods: {
             setActiveVault(vault) {
+                debugger
                 this.$store.dispatch('setActiveVault', vault)
                 this.$store.dispatch('getKeepsByVault', vault.id)
             },
@@ -156,6 +158,15 @@
             },
             deleteVault(vaultId) {
                 this.$store.dispatch('deleteVault', vaultId)
+            },
+            addLike(keep) {
+                keep.views++
+                this.$store.dispatch('updateKeep', keep)
+            },
+            setActiveKeep(keep) {
+                keep.views++
+                this.$store.dispatch('setActiveKeep', keep)
+                this.$store.dispatch('updateKeep', keep)
             }
         },
         mounted() {

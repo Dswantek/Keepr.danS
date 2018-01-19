@@ -178,7 +178,4 @@
   transform: translate(-50%, -50%);
   text-align: center;
 }
-  /* .hoverButton{
-    position: center;
-  } */
 </style>
